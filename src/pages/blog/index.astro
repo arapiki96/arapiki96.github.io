@@ -1,0 +1,25 @@
+---
+import BaseLayout from "../../layouts/baselayout.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog"))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout title="Blog | Thomas Manch">
+  <h1>Blog</h1>
+  <p class="muted">Notes and analysis.</p>
+
+  <ul>
+    {posts.map((post) => (
+      <li>
+        <a href={`/blog/${post.slug}/`}>{post.data.title}</a>
+        <span class="muted">
+          {" "}— {post.data.pubDate.toISOString().slice(0, 10)}
+        </span>
+        {post.data.description ? <div class="muted">{post.data.description}</div> : null}
+      </li>
+    ))}
+  </ul>
+</BaseLayout>

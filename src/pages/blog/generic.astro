@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../../layouts/baselayout.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<BaseLayout title={`${post.data.title} | Thomas Manch`}>
+  <h1>{post.data.title}</h1>
+  <p class="muted">{post.data.pubDate.toISOString().slice(0, 10)}</p>
+  <Content />
+</BaseLayout>

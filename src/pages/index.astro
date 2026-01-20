@@ -1,13 +1,22 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import BaseLayout from "../layouts/baselayout.astro";
 ---
 
----
----
-<h1>Thomas Manch</h1>
-<p>Senior reporter at BusinessDesk.co.nz covering infrastructure, transport, housing, and the politics around it. </p>
+<BaseLayout title="Thomas Manch">
+  <h1>Thomas Manch</h1>
+  <p class="muted">
+    Senior reporter covering infrastructure, transport, housing, and policy in New Zealand.
+  </p>
 
+  <h2>Selected writing</h2>
+  <p><a href="/writing">Recent BusinessDesk stories →</a></p>
+
+  <h2>Blog</h2>
+  <p><a href="/blog">Notes and analysis →</a></p>
+
+  <h2>How to talk to a journalist</h2>
+  <p><a href="/how-to-talk-to-a-journalist">Practical guidance for sources →</a></p>
+
+  <h2>Contact</h2>
+  <p><a href="/contact">Email and secure options →</a></p>
+</BaseLayout>

@@ -1,0 +1,20 @@
+---
+import BaseLayout from "../layouts/baselayout.astro";
+import { writing } from "../data/writing";
+
+const items = [...writing].sort((a, b) => b.date.localeCompare(a.date));
+---
+
+<BaseLayout title="Writing | Thomas Manch">
+  <h1>Writing</h1>
+  <p class="muted">Selected work for BusinessDesk.</p>
+
+  <ul>
+    {items.map((item) => (
+      <li>
+        <a href={item.url} target="_blank" rel="noopener noreferrer">{item.title}</a>
+        <span class="muted"> — {item.outlet}, {item.date}</span>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>
