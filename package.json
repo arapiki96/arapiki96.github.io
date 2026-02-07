@@ -9,6 +9,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.16.11"
+    "astro": "^5.16.11",
+    "fast-xml-parser": "^5.3.3"
   }
 }

@@ -1,28 +1,82 @@
 ---
 import BaseLayout from "../layouts/baselayout.astro";
+import { getThomasManchStories } from "../lib/businessdeskFeed.js";
+
+let stories = [];
+try {
+  stories = await getThomasManchStories(10);
+} catch (e) {
+  console.error(e);
+}
+
+const dateFormatter = new Intl.DateTimeFormat("en-NZ", {
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+});
+
+function formatPubDate(value) {
+  const date = new Date(value);
+  return Number.isNaN(date.valueOf()) ? value : dateFormatter.format(date);
+}
+
+const updatedAt = new Intl.DateTimeFormat("en-NZ", {
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+}).format(new Date());
 ---
 
 <BaseLayout title="Thomas Manch">
-<section class="intro">
-  <div class="intro-text">
-    <h1>Thomas Manch</h1>
-    <p>
-      I'm a senior reporter covering infrastructure, transport, and housing for
-      businessdesk.co.nz. </p>
-      <p>I've worked as a reporter for a decade, and previously covered politics and Paliament, 
-      with a focus on foriegn policy, defence, and national security, for <i>The Post</i> and Stuff.co.nz.</p> 
-      <p>I live in Wellington, New Zealand.
-    </p>
-    <p>Welcome to my website. Here I intend to showcase my work, share the odd blogpost, and provide the best means to contact me. 
-    </p>
-  </div>
+  <section class="intro">
+    <div class="intro-text">
+      <h1>Thomas Manch</h1>
+      <p>I'm a senior reporter covering infrastructure, transport, and housing for businessdesk.co.nz.</p>
+      <p>
+        I've worked as a reporter for a decade, and previously covered politics and Parliament,
+        with a focus on foreign policy, defence, and national security, for <i>The Post</i> and Stuff.co.nz.
+      </p>
+      <p>I live in Wellington, New Zealand.</p>
+      <p>   
+        Welcome to my website. Here I intend to showcase my work, share the odd blogpost, and provide the best means to contact me.
+      </p>
+    </div>
 
-  <div class="intro-photo">
-    <img src="/thomas.jpg" alt="Thomas Manch"/>
-  </div>
-</section>
-  <h2>My reporting</h2>
-  <p><a href="/writing">Read my latest work</a></p>
+    <div class="intro-photo">
+      <img src="/thomas.jpg" alt="Thomas Manch" />
+    </div>
+  </section>
+
+  <section>
+    <h2>Latest on BusinessDesk</h2>
+    <p class="muted">Last updated: {updatedAt} (NZ time)</p>
+
+    {stories.length ? (
+      <ol>
+        {stories.map((s) => (
+          <li>
+            <a href={s.link} target="_blank" rel="noopener noreferrer">
+              {s.title}
+            </a>
+            <div class="meta">{formatPubDate(s.pubDate)}</div>
+          </li>
+        ))}
+      </ol>
+    ) : (
+      <p>No recent items found.</p>
+    )}
+  </section>
+
+<nav aria-label="Social links">
+     <h2>Find me on</h2>
+    <ul>
+    <li><a href="https://x.com/thomas_manch_" rel="me noopener noreferrer" target="_blank">X</a></li>
+    <li><a href="https://www.linkedin.com/in/thomas-manch-58a612157/" rel="me noopener noreferrer" target="_blank">LinkedIn</a></li>
+    <li><a href="https://www.instagram.com/thomas_manch_/" rel="me noopener noreferrer" target="_blank">Instagram</a></li>
+  </ul>
+</nav>
 
   <h2>Blog</h2>
   <p><a href="/blog">Personal and professional views, not fit for print →</a></p>
