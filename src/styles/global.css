@@ -202,12 +202,19 @@ hr {
 
 @media (max-width: 700px) {
   .intro {
-    grid-template-columns: 1fr;
+    display: block;
   }
 
   .intro-photo {
-    order: -1;
-    margin-bottom: 24px;
+    float: right;
+    width: 120px;
+    margin: 0 0 12px 16px;
+  }
+
+  .intro::after {
+    content: "";
+    display: block;
+    clear: both;
   }
 }
 
