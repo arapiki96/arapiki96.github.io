@@ -2,6 +2,7 @@
 import "../styles/global.css";
 const { title = "Thomas Manch" } = Astro.props;
 const path = Astro.url.pathname;
+const showBrand = path !== "/";
 ---
 
 <!doctype html>
@@ -25,14 +26,14 @@ const path = Astro.url.pathname;
   <body>
     <div class="page">
       <aside class="sidebar">
-        <div class="brand">???</div>
+        {showBrand ? <div class="brand">Thomas Manch</div> : null}
 
         <nav aria-label="Primary">
-          <a href="/" aria-current={path === "/" ? "page" : undefined}>Home</a>
-          <a href="/writing" aria-current={path.startsWith("/writing") ? "page" : undefined}>Writing</a>
+          <a href="/" aria-current={path === "/" ? "page" : undefined}>About</a>
+          <a href="/writing" aria-current={path.startsWith("/writing") ? "page" : undefined}>Reporting</a>
           <a href="/blog" aria-current={path.startsWith("/blog") ? "page" : undefined}>Blog</a>
-          <a href="/how-to-talk-to-a-journalist" aria-current={path.startsWith("/how-to-talk-to-a-journalist") ? "page" : undefined}>Help a reporter</a>
-          <a href="/contact" aria-current={path.startsWith("/contact") ? "page" : undefined}>Contact</a>
+          <a href="/how-to-talk-to-a-journalist" aria-current={path.startsWith("/how-to-talk-to-a-journalist") ? "page" : undefined}>Talk to a reporter</a>
+          <a href="/contact" aria-current={path.startsWith("/contact") ? "page" : undefined}>Contact me</a>
         </nav>
       </aside>
 
