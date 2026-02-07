@@ -180,12 +180,24 @@ hr {
 .intro {
   display: grid;
   grid-template-columns: 1fr 180px;
+  grid-template-areas:
+    "title photo"
+    "text photo";
   gap: 35px;
   align-items: start;
   margin-bottom: 56px;
 }
 
+.intro-title {
+  grid-area: title;
+}
+
+.intro-text {
+  grid-area: text;
+}
+
 .intro-photo {
+  grid-area: photo;
   margin-top: 45px;
 }
 
@@ -203,6 +215,10 @@ hr {
 @media (max-width: 700px) {
   .intro {
     display: block;
+  }
+
+  .intro-title {
+    margin-bottom: 0.4em;
   }
 
   .intro-photo {
