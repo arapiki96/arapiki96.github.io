@@ -1,45 +1,41 @@
-import { XMLParser } from "fast-xml-parser";
+const AUTHOR_URL = "https://businessdesk.co.nz/journalist/thomas-manch?page=1";
 
-const FEED_URL = "https://businessdesk.co.nz/feed";
-const BYLINE = "Thomas Manch";
+function decodeEntities(text) {
+  return text
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, "\"")
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">");
+}
 
-function getCreatorString(creator) {
-  if (typeof creator === "string") return creator;
-  if (creator && typeof creator === "object") {
-    if (typeof creator["#text"] === "string") return creator["#text"];
-    if (typeof creator["$text"] === "string") return creator["$text"];
-  }
-  return "";
+function cleanText(text) {
+  return decodeEntities(text.replace(/\s+/g, " ").trim());
 }
 
 export async function getThomasManchStories(limit = 10) {
-  const res = await fetch(FEED_URL, {
+  const res = await fetch(AUTHOR_URL, {
     headers: { "User-Agent": "GitHubActions-Astro" },
   });
 
   if (!res.ok) {
-    throw new Error(`RSS fetch failed: ${res.status} ${res.statusText}`);
+    throw new Error(`Author page fetch failed: ${res.status} ${res.statusText}`);
   }
 
-  const xml = await res.text();
+  const html = await res.text();
+  const entries = [];
+  const regex =
+    /<h2 class="card-title[^"]*">[\s\S]*?<a href="([^"]+)">([\s\S]*?)<\/a>[\s\S]*?<span class="news-date[^"]*">([\s\S]*?)<\/span>/g;
 
-  const parser = new XMLParser({
-    ignoreAttributes: false,
-    removeNSPrefix: false,
-  });
+  let match;
+  while ((match = regex.exec(html)) && entries.length < limit) {
+    const link = match[1];
+    const title = cleanText(match[2]);
+    const pubDate = cleanText(match[3]);
+    if (link && title) {
+      entries.push({ title, link, pubDate });
+    }
+  }
 
-  const data = parser.parse(xml);
-  const items = data?.rss?.channel?.item ?? [];
-  const list = Array.isArray(items) ? items : [items];
-
-  return list
-    .filter((it) => getCreatorString(it["dc:creator"]).trim() === BYLINE)
-    .filter((it) => typeof it.link === "string" && it.link.includes("/article/"))
-    .filter((it) => !it.link.includes("/sponsored/") && !it.link.includes("/the-quiz/"))
-    .slice(0, limit)
-    .map((it) => ({
-      title: it.title,
-      link: it.link,
-      pubDate: it.pubDate,
-    }));
+  return entries;
 }
