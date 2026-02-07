@@ -39,8 +39,15 @@ const updatedAt = new Intl.DateTimeFormat("en-NZ", {
         with a focus on foreign policy, defence, and national security, for <i>The Post</i> and Stuff.co.nz.
       </p>
       <p>I live in Wellington, New Zealand.</p>
-      <p>   
-        Welcome to my website. Here I intend to showcase my work, share the odd blogpost, and provide the best means to contact me.
+      <p>
+        Welcome to my website. Here I intend to display my work and provide the best means to contact me.
+      </p>
+      <p>
+        You can also find me on social media where I post about issues I'm following and my reporting on
+        <a href="https://www.instagram.com/thomas_manch_/" rel="me noopener noreferrer" target="_blank">Instagram</a>,
+        <a href="https://x.com/thomas_manch_" rel="me noopener noreferrer" target="_blank">X (Twitter)</a>,
+        and
+        <a href="https://www.linkedin.com/in/thomas-manch-58a612157/" rel="me noopener noreferrer" target="_blank">LinkedIn</a>.
       </p>
     </div>
 
@@ -50,7 +57,7 @@ const updatedAt = new Intl.DateTimeFormat("en-NZ", {
   </section>
 
   <section>
-    <h2>Latest on BusinessDesk</h2>
+    <h2>My latest on BusinessDesk</h2>
     <p class="muted">Last updated: {updatedAt} (NZ time)</p>
 
     {stories.length ? (
@@ -69,21 +76,4 @@ const updatedAt = new Intl.DateTimeFormat("en-NZ", {
     )}
   </section>
 
-<nav aria-label="Social links">
-     <h2>Find me on</h2>
-    <ul>
-    <li><a href="https://x.com/thomas_manch_" rel="me noopener noreferrer" target="_blank">X</a></li>
-    <li><a href="https://www.linkedin.com/in/thomas-manch-58a612157/" rel="me noopener noreferrer" target="_blank">LinkedIn</a></li>
-    <li><a href="https://www.instagram.com/thomas_manch_/" rel="me noopener noreferrer" target="_blank">Instagram</a></li>
-  </ul>
-</nav>
-
-  <h2>Blog</h2>
-  <p><a href="/blog">Personal and professional views, not fit for print →</a></p>
-
-  <h2>Help a reporter</h2>
-  <p><a href="/how-to-talk-to-a-journalist">A how-to guide for talking to a journalist (me) →</a></p>
-
-  <h2>Contact</h2>
-  <p><a href="/contact">Get in touch →</a></p>
 </BaseLayout>
