@@ -5,14 +5,14 @@ import { getCollection } from "astro:content";
 export async function getStaticPaths() {
   const posts = (await getCollection("blog")).filter((p) => !p.data.draft);
   return posts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: post.slug.replace(/\/index$/, "") },
     props: { post },
   }));
 }
 
 const { post } = Astro.props;
 const description = post.data.description ?? undefined;
-const publishedTime = post.data.pubDate ?? undefined;
+const publishedTime = post.data.date ?? undefined;
 const { Content } = await post.render();
 ---
 
@@ -23,6 +23,6 @@ const { Content } = await post.render();
   publishedTime={publishedTime}
 >
   <h2>{post.data.title}</h2>
-  <p class="muted">{post.data.pubDate.toISOString().slice(0, 10)}</p>
+  <p class="muted">{post.data.date.toISOString().slice(0, 10)}</p>
   <Content />
 </BaseLayout>

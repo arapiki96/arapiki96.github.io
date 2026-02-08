@@ -41,6 +41,23 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
 
+## 📝 Keystatic CMS (Blog)
+
+The blog is managed via Keystatic and stored as files in `src/content/blog/`.
+
+### Run locally
+1) `npm install`
+2) `npm run dev`
+3) Visit `http://localhost:4321/keystatic` (dev only)
+
+### Add/edit a post
+- Use the Keystatic UI to create or edit posts.
+- Content is saved to files in `src/content/blog/`.
+
+### Publish
+- Commit changes to the repo and push.
+- GitHub Actions builds and deploys the site.
+
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).

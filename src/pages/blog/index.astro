@@ -4,7 +4,9 @@ import { getCollection } from "astro:content";
 
 const posts = (await getCollection("blog"))
   .filter((p) => !p.data.draft)
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const normalizeSlug = (slug) => slug.replace(/\/index$/, "");
 ---
 
 <BaseLayout
@@ -17,9 +19,9 @@ const posts = (await getCollection("blog"))
   <ul>
     {posts.map((post) => (
       <li>
-        <a href={`/blog/${post.slug}/`}>{post.data.title}</a>
+        <a href={`/blog/${normalizeSlug(post.slug)}/`}>{post.data.title}</a>
         <span class="muted">
-          {" "}— {post.data.pubDate.toISOString().slice(0, 10)}
+          {" "}— {post.data.date.toISOString().slice(0, 10)}
         </span>
         {post.data.description ? <div class="muted">{post.data.description}</div> : null}
       </li>
