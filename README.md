@@ -55,8 +55,14 @@ The blog is managed via Keystatic and stored as files in `src/content/blog/`.
 - Content is saved to files in `src/content/blog/`.
 
 ### Publish
-- Commit changes to the repo and push.
-- GitHub Actions builds and deploys the site.
+Run these from the project root after editing/creating posts:
+```
+git status -sb
+git add -A
+git commit -m "Add blog post"
+git push
+```
+GitHub Actions builds and deploys the site after you push.
 
 ## 👀 Want to learn more?
 
