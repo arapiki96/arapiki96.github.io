@@ -1,0 +1,60 @@
+---
+const {
+  title,
+  description,
+  canonicalUrl,
+  ogImage,
+  ogType = "website",
+  publishedTime,
+  modifiedTime,
+} = Astro.props;
+
+const site = Astro.site ?? new URL("https://arapiki96.github.io");
+const siteName = "Thomas Manch";
+const defaultDescription =
+  "Personal website of Thomas Manch, senior reporter covering infrastructure, transport, and housing.";
+
+const resolvedTitle = title
+  ? title === siteName
+    ? siteName
+    : `${title} | ${siteName}`
+  : siteName;
+
+const resolvedDescription = description ?? defaultDescription;
+
+const resolvedCanonical = canonicalUrl
+  ? new URL(canonicalUrl, site).toString()
+  : new URL(Astro.url.pathname, site).toString();
+
+const resolvedOgImage = ogImage ? new URL(ogImage, site).toString() : undefined;
+
+function toIso(value) {
+  if (!value) return undefined;
+  if (value instanceof Date) return value.toISOString();
+  const date = new Date(value);
+  return Number.isNaN(date.valueOf()) ? undefined : date.toISOString();
+}
+
+const publishedIso = toIso(publishedTime);
+const modifiedIso = toIso(modifiedTime);
+const twitterCard = resolvedOgImage ? "summary_large_image" : "summary";
+---
+
+<title>{resolvedTitle}</title>
+<meta name="description" content={resolvedDescription} />
+<link rel="canonical" href={resolvedCanonical} />
+
+<meta property="og:title" content={resolvedTitle} />
+<meta property="og:description" content={resolvedDescription} />
+<meta property="og:url" content={resolvedCanonical} />
+<meta property="og:type" content={ogType} />
+{resolvedOgImage ? <meta property="og:image" content={resolvedOgImage} /> : null}
+<meta property="og:site_name" content={siteName} />
+
+{publishedIso ? <meta property="article:published_time" content={publishedIso} /> : null}
+{modifiedIso ? <meta property="article:modified_time" content={modifiedIso} /> : null}
+
+<meta name="twitter:card" content={twitterCard} />
+<meta name="twitter:title" content={resolvedTitle} />
+<meta name="twitter:description" content={resolvedDescription} />
+{resolvedOgImage ? <meta name="twitter:image" content={resolvedOgImage} /> : null}

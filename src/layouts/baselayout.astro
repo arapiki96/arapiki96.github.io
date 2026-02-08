@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import SEO from "../components/SEO.astro";
 const { title = "Thomas Manch" } = Astro.props;
 const path = Astro.url.pathname;
 const showBrand = path !== "/";
@@ -20,8 +21,7 @@ const showBrand = path !== "/";
       rel="stylesheet"
     >
 
-    <title>{title}</title>
-    <meta name="description" content="Personal website" />
+    <SEO {...Astro.props} title={title} />
   </head>
 
   <body>
