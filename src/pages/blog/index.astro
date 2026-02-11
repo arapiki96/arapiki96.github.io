@@ -6,25 +6,30 @@ const posts = (await getCollection("blog"))
   .filter((p) => !p.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-const normalizeSlug = (slug) => slug.replace(/\/index$/, "");
+const normalizeSlug = (slug: string) => slug.replace(/\/index$/, "");
 ---
 
 <BaseLayout
   title="Blog"
   description="Notes, analysis, and occasional updates."
+  canonicalUrl="/blog/"
 >
   <h1>Blog</h1>
   <p class="muted">Errant thoughts</p>
 
-  <ul>
-    {posts.map((post) => (
-      <li>
-        <a href={`/blog/${normalizeSlug(post.slug)}/`}>{post.data.title}</a>
-        <span class="muted">
-          {" "}— {post.data.date.toISOString().slice(0, 10)}
-        </span>
-        {post.data.description ? <div class="muted">{post.data.description}</div> : null}
-      </li>
-    ))}
-  </ul>
+  {posts.length > 0 ? (
+    <ul>
+      {posts.map((post) => (
+        <li>
+          <a href={`/blog/${normalizeSlug(post.slug)}/`}>{post.data.title}</a>
+          <span class="muted">
+            {" "}— <time datetime={post.data.date.toISOString()}>{post.data.date.toISOString().slice(0, 10)}</time>
+          </span>
+          {post.data.description ? <div class="muted">{post.data.description}</div> : null}
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p class="muted">No posts yet. Check back soon!</p>
+  )}
 </BaseLayout>

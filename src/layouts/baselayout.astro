@@ -12,6 +12,7 @@ const showBrand = path !== "/";
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title="Thomas Manch Blog" href="/rss.xml" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,6 +26,7 @@ const showBrand = path !== "/";
   </head>
 
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <div class="page">
       <aside class="sidebar">
         {showBrand ? <div class="brand">Thomas Manch</div> : null}
@@ -38,7 +40,7 @@ const showBrand = path !== "/";
         </nav>
       </aside>
 
-      <main>
+      <main id="main-content">
         <slot />
 
         <footer class="site-footer">

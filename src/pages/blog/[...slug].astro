@@ -23,6 +23,6 @@ const { Content } = await post.render();
   publishedTime={publishedTime}
 >
   <h2>{post.data.title}</h2>
-  <p class="muted">{post.data.date.toISOString().slice(0, 10)}</p>
+  <p class="muted"><time datetime={post.data.date.toISOString()}>{post.data.date.toISOString().slice(0, 10)}</time></p>
   <Content />
 </BaseLayout>

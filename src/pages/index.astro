@@ -1,32 +1,20 @@
 ---
+import { Image } from "astro:assets";
 import BaseLayout from "../layouts/baselayout.astro";
-import { getThomasManchStories } from "../lib/businessdeskFeed.js";
+import { getThomasManchStories } from "../lib/businessdeskFeed";
+import { formatDate, formatDateTime } from "../lib/dateUtils";
+import thomasPhoto from "../assets/thomas.jpg";
 
 let stories = [];
+let errorMessage = null;
 try {
   stories = await getThomasManchStories(10);
 } catch (e) {
-  console.error(e);
+  console.error('BusinessDesk feed error:', e);
+  errorMessage = e.message || 'Unable to load recent stories at this time';
 }
 
-const dateFormatter = new Intl.DateTimeFormat("en-NZ", {
-  year: "numeric",
-  month: "short",
-  day: "numeric",
-});
-
-function formatPubDate(value) {
-  const date = new Date(value);
-  return Number.isNaN(date.valueOf()) ? value : dateFormatter.format(date);
-}
-
-const updatedAt = new Intl.DateTimeFormat("en-NZ", {
-  year: "numeric",
-  month: "short",
-  day: "numeric",
-  hour: "2-digit",
-  minute: "2-digit",
-}).format(new Date());
+const updatedAt = formatDateTime(new Date());
 ---
 
 <BaseLayout
@@ -36,7 +24,7 @@ const updatedAt = new Intl.DateTimeFormat("en-NZ", {
   <section class="intro">
     <h1 class="intro-title">Thomas Manch</h1>
     <div class="intro-photo">
-      <img src="/thomas.jpg" alt="Thomas Manch" />
+      <Image src={thomasPhoto} alt="Thomas Manch" width={180} height={180} />
     </div>
     <div class="intro-text">
       <p>I'm a senior reporter covering infrastructure, transport, and housing at <a href="https://businessdesk.co.nz/journalist/thomas-manch" rel="me noopener noreferrer" target="_blank">BusinessDesk</a>.</p>
@@ -61,19 +49,21 @@ const updatedAt = new Intl.DateTimeFormat("en-NZ", {
     <h2>Recent reporting on BusinessDesk</h2>
     <p class="muted">Last updated: {updatedAt} (NZ time)</p>
 
-    {stories.length ? (
+    {errorMessage ? (
+      <p class="muted">Stories temporarily unavailable. Please visit <a href="https://businessdesk.co.nz/journalist/thomas-manch" target="_blank" rel="noopener noreferrer">BusinessDesk</a> directly.</p>
+    ) : stories.length ? (
       <ol>
         {stories.map((s) => (
           <li>
             <a href={s.link} target="_blank" rel="noopener noreferrer">
               {s.title}
             </a>
-            <div class="meta">{formatPubDate(s.pubDate)}</div>
+            <div class="meta">{formatDate(s.pubDate)}</div>
           </li>
         ))}
       </ol>
     ) : (
-      <p>No recent items found.</p>
+      <p class="muted">No recent items found.</p>
     )}
   </section>
 

@@ -1,4 +1,6 @@
 ---
+import StructuredData from "./StructuredData.astro";
+
 const {
   title,
   description,
@@ -58,3 +60,17 @@ const twitterCard = resolvedOgImage ? "summary_large_image" : "summary";
 <meta name="twitter:title" content={resolvedTitle} />
 <meta name="twitter:description" content={resolvedDescription} />
 {resolvedOgImage ? <meta name="twitter:image" content={resolvedOgImage} /> : null}
+
+{ogType === "article" ? (
+  <StructuredData
+    type="Article"
+    data={{
+      title: resolvedTitle,
+      description: resolvedDescription,
+      datePublished: publishedIso,
+      dateModified: modifiedIso
+    }}
+  />
+) : (
+  <StructuredData type="Person" />
+)}

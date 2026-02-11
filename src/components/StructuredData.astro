@@ -1,0 +1,44 @@
+---
+const { type = "Person", data } = Astro.props;
+
+const site = Astro.site ?? new URL("https://arapiki96.github.io");
+
+let schema;
+
+if (type === "Person") {
+  schema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Thomas Manch",
+    jobTitle: "Senior Reporter",
+    description: "Senior reporter covering infrastructure, transport, and housing in New Zealand",
+    url: site.toString(),
+    sameAs: [
+      "https://www.instagram.com/thomas_manch_/",
+      "https://x.com/thomas_manch_",
+      "https://www.linkedin.com/in/thomas-manch-58a612157/",
+      "https://businessdesk.co.nz/journalist/thomas-manch"
+    ],
+    worksFor: {
+      "@type": "Organization",
+      name: "BusinessDesk"
+    }
+  };
+} else if (type === "Article") {
+  schema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: data.title,
+    description: data.description,
+    author: {
+      "@type": "Person",
+      name: "Thomas Manch"
+    },
+    datePublished: data.datePublished,
+    dateModified: data.dateModified || data.datePublished,
+    url: new URL(Astro.url.pathname, site).toString()
+  };
+}
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
