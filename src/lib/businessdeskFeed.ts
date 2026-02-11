@@ -57,7 +57,10 @@ export async function getThomasManchStories(limit = 10): Promise<Story[]> {
       const link = match[1];
       const title = cleanText(match[2]);
       const pubDate = cleanText(match[3]);
-      if (link && title) {
+
+      // Security: Validate that links are from businessdesk.co.nz domain
+      // This prevents potential XSS or phishing if the source site is compromised
+      if (link && title && link.startsWith('https://businessdesk.co.nz/')) {
         entries.push({ title, link, pubDate });
       }
     }

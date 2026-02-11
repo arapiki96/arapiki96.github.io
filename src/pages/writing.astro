@@ -1,8 +1,24 @@
 ---
+import { Image } from "astro:assets";
 import BaseLayout from "../layouts/baselayout.astro";
 import { writing } from "../data/writing";
+import { featuredWork } from "../data/featured-work";
 
 const items = [...writing].sort((a, b) => b.date.localeCompare(a.date));
+
+// Import featured work images dynamically
+// This will fail gracefully if images don't exist yet
+const featuredImages = await Promise.all(
+  featuredWork.map(async (work) => {
+    try {
+      const image = await import(`../assets/frontpages/${work.image}`);
+      return { ...work, imageSrc: image.default };
+    } catch (e) {
+      // Image doesn't exist yet - will be skipped in rendering
+      return { ...work, imageSrc: null };
+    }
+  })
+).then(items => items.filter(item => item.imageSrc !== null));
 ---
 
 <BaseLayout
@@ -57,4 +73,76 @@ const items = [...writing].sort((a, b) => b.date.localeCompare(a.date));
     
     <a href="https://www.thepost.co.nz/politics/360623468/dealing-dark-heart-american-berserk" target="_blank" rel="noopener noreferrer">subject</a>.
   </p>
+
+  {featuredImages.length > 0 && (
+    <>
+      <h2>Featured stories</h2>
+      <div class="featured-grid">
+        {featuredImages.map((work, index) => (
+          <article class="featured-item">
+            <button
+              class="featured-image-button"
+              data-modal={`modal-${index}`}
+              aria-label={`View larger image: ${work.title}`}
+            >
+              <Image
+                src={work.imageSrc}
+                alt={work.imageAlt}
+                width={400}
+                height={533}
+                class="featured-image"
+              />
+            </button>
+            <h3 class="featured-title">{work.title}</h3>
+            <div class="featured-meta">
+              <span class="muted">{work.outlet}</span>
+              <span class="muted"> · </span>
+              <time class="muted" datetime={work.date}>
+                {new Date(work.date).toLocaleDateString('en-NZ', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric'
+                })}
+              </time>
+            </div>
+            <a href={work.url} target="_blank" rel="noopener noreferrer" class="featured-link">
+              Read story →
+            </a>
+
+            {/* Modal for larger image view */}
+            <dialog id={`modal-${index}`} class="featured-modal">
+              <form method="dialog" class="modal-content">
+                <button class="modal-close" aria-label="Close">×</button>
+                <Image
+                  src={work.imageSrc}
+                  alt={work.imageAlt}
+                  width={800}
+                  class="modal-image"
+                />
+                <div class="modal-caption">
+                  <strong>{work.title}</strong>
+                  <div class="muted">{work.outlet} · {new Date(work.date).toLocaleDateString('en-NZ', { year: 'numeric', month: 'short', day: 'numeric' })}</div>
+                </div>
+              </form>
+            </dialog>
+          </article>
+        ))}
+      </div>
+    </>
+  )}
+
+  <script>
+    // Set up modal event listeners after DOM loads
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.featured-image-button').forEach((button) => {
+        button.addEventListener('click', () => {
+          const modalId = button.getAttribute('data-modal');
+          const modal = document.getElementById(modalId);
+          if (modal) {
+            modal.showModal();
+          }
+        });
+      });
+    });
+  </script>
 </BaseLayout>

@@ -69,6 +69,43 @@ The site deploys automatically via GitHub Actions ([.github/workflows/deploy.yml
 - **@astrojs/markdoc**: Markdoc content format
 - **@keystatic/astro**: CMS for blog management
 
+## Security
+
+### Security Headers
+The site implements comprehensive security headers via middleware ([src/middleware.ts](src/middleware.ts)):
+- **Content Security Policy (CSP)**: Restricts resource loading to prevent XSS attacks
+- **X-Frame-Options**: Prevents clickjacking attacks
+- **Strict-Transport-Security (HSTS)**: Enforces HTTPS connections
+- **X-Content-Type-Options**: Prevents MIME-type sniffing
+- **Referrer-Policy**: Controls referrer information sent with requests
+- **Permissions-Policy**: Restricts browser features (geolocation, camera, microphone)
+
+### Keystatic CMS Security
+**IMPORTANT**: Keystatic is only available during local development and is disabled in production builds.
+- Never expose the development server (`npm run dev`) to the public internet
+- Keystatic provides unauthenticated local file system access at `/keystatic`
+- Only run the dev server on localhost or trusted local networks
+- Production builds automatically exclude Keystatic ([astro.config.mjs:11](astro.config.mjs#L11))
+
+### External Content Security
+**BusinessDesk Feed** ([src/lib/businessdeskFeed.ts](src/lib/businessdeskFeed.ts)):
+- Validates all URLs are from `businessdesk.co.nz` domain before rendering
+- Implements 10-second timeout to prevent hanging requests
+- HTML entities are properly decoded but not executed
+- Errors are handled gracefully without exposing internal details
+
+### Dependency Security
+- Automated `npm audit` runs on every deployment (audit-level: high)
+- Deployment fails if high or critical vulnerabilities are detected
+- Dependencies are locked via `package-lock.json`
+- Production builds use `npm ci` to ensure reproducible installs
+
+### Third-Party Resources
+**Google Fonts**: Loaded from Google CDN without Subresource Integrity (SRI) hashes.
+- Google Fonts doesn't officially support SRI due to dynamic content
+- Consider self-hosting fonts if stricter security is required
+- Current implementation uses `crossorigin` attribute for CORS
+
 ## Publishing Blog Posts
 
 After creating/editing posts in Keystatic:
