@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/baselayout.astro";
 import { getCollection } from "astro:content";
+import { formatDate } from "../../lib/dateUtils";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("blog")).filter((p) => !p.data.draft);
@@ -13,12 +14,7 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const description = post.data.description ?? undefined;
 const publishedTime = post.data.date ?? undefined;
-const displayDate = new Intl.DateTimeFormat("en-NZ", {
-  day: "2-digit",
-  month: "2-digit",
-  year: "numeric",
-  timeZone: "UTC",
-}).format(post.data.date);
+const displayDate = formatDate(post.data.date);
 const { Content } = await post.render();
 ---
 
