@@ -3,4 +3,4 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://arapiki96.github.io/sitemap-index.xml
+Sitemap: https://www.thomasmanch.com/sitemap-index.xml

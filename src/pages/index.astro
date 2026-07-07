@@ -1,25 +1,25 @@
 ---
 import { Image } from "astro:assets";
 import BaseLayout from "../layouts/baselayout.astro";
-import { getThomasManchStories } from "../lib/businessdeskFeed";
-import { formatDate, formatDateTime } from "../lib/dateUtils";
+import { getThomasManchStories, type Story } from "../lib/businessdeskFeed";
+import { formatDate } from "../lib/dateUtils";
 import thomasPhoto from "../assets/thomas.jpg";
 
-let stories = [];
-let errorMessage = null;
+let stories: Story[] = [];
+let errorMessage: string | null = null;
 try {
   stories = await getThomasManchStories(10);
 } catch (e) {
   console.error('BusinessDesk feed error:', e);
-  errorMessage = e.message || 'Unable to load recent stories at this time';
+  errorMessage = e instanceof Error ? e.message : 'Unable to load recent stories at this time';
 }
 
-const updatedAt = formatDateTime(new Date());
+const updated = formatDate(new Date());
 ---
 
 <BaseLayout
   title="Thomas Manch"
-  description="Senior reporter covering infrastructure, transport, and housing in New Zealand."
+  description="Thomas Manch is a New Zealand journalist covering infrastructure, transport and housing for BusinessDesk."
 >
   <section class="intro">
     <h1 class="intro-title">Thomas Manch</h1>
@@ -27,44 +27,45 @@ const updatedAt = formatDateTime(new Date());
       <Image src={thomasPhoto} alt="Thomas Manch" width={180} height={180} />
     </div>
     <div class="intro-text">
-      <p>I'm a senior reporter covering infrastructure, transport, and housing at <a href="https://businessdesk.co.nz/journalist/thomas-manch" rel="me noopener noreferrer" target="_blank">BusinessDesk</a>.</p>
       <p>
-        I've worked as a journalist for a decade. Previously I covered politics,
-        with a focus on foreign policy, trade, and defence, for <i>The Post</i> and Stuff.co.nz. I have also been a crime and general news reporter.
+        Thomas Manch is a senior reporter covering infrastructure at
+        <a href="https://businessdesk.co.nz/journalist/thomas-manch" rel="me noopener noreferrer" target="_blank">BusinessDesk</a>.
+        He has worked as a journalist for a decade, previously covering politics for six years in the press gallery, with a focus on
+        foreign policy, trade, and defence issues, for <i>The Post</i> and Stuff.co.nz. He has also been a crime and general reporter, and spent a year at the <i>Waikato Times</i>.
       </p>
-      <p>I live in Wellington, New Zealand.</p>
+      <p>He lives in Wellington, New Zealand.</p>
       <p>
-        On this website I intend to display my work and provide the best means to contact me.
-      </p>
-      <p>
-        You can also find me on
+       Connect with Thomas on 
         <a href="https://www.instagram.com/thomas_manch_/" rel="me noopener noreferrer" target="_blank">Instagram</a>,
-        <a href="https://x.com/thomas_manch" rel="me noopener noreferrer" target="_blank">X (Twitter)</a>,
+        <a href="https://x.com/thomas_manch_" rel="me noopener noreferrer" target="_blank">X (Twitter)</a>,
         and
         <a href="https://www.linkedin.com/in/thomas-manch-58a612157/" rel="me noopener noreferrer" target="_blank">LinkedIn</a>.
       </p>
     </div>
   </section>
-  <section>
-    <h2>Recent reporting on BusinessDesk</h2>
-    <p class="muted">Last updated: {updatedAt} (NZ time)</p>
 
-    {errorMessage ? (
-      <p class="muted">Stories temporarily unavailable. Please visit <a href="https://businessdesk.co.nz/journalist/thomas-manch" target="_blank" rel="noopener noreferrer">BusinessDesk</a> directly.</p>
-    ) : stories.length ? (
-      <ol>
-        {stories.map((s) => (
-          <li>
-            <a href={s.link} target="_blank" rel="noopener noreferrer">
-              {s.title}
+  <div class="index-page">
+    <section class="work-section">
+      <div class="recent-head">
+        <h2>Recent reporting on BusinessDesk</h2>
+        <span class="updated">Updated {updated}</span>
+      </div>
+
+      {errorMessage ? (
+        <p class="muted">Stories temporarily unavailable. Please visit <a href="https://businessdesk.co.nz/journalist/thomas-manch" target="_blank" rel="noopener noreferrer">BusinessDesk</a> directly.</p>
+      ) : stories.length ? (
+        <>
+          {stories.map((s) => (
+            <a class="work-item" href={s.link} target="_blank" rel="noopener noreferrer">
+              <span class="work-item__title">{s.title}</span>
+              <span class="work-item__meta">{formatDate(s.pubDate)}</span>
             </a>
-            <div class="meta">{formatDate(s.pubDate)}</div>
-          </li>
-        ))}
-      </ol>
-    ) : (
-      <p class="muted">No recent items found.</p>
-    )}
-  </section>
-
+          ))}
+          <a class="more-link" href="https://businessdesk.co.nz/journalist/thomas-manch?page=1" target="_blank" rel="noopener noreferrer">All reporting on BusinessDesk →</a>
+        </>
+      ) : (
+        <p class="muted">No recent items found.</p>
+      )}
+    </section>
+  </div>
 </BaseLayout>

@@ -1,7 +1,7 @@
 ---
 const { type = "Person", data } = Astro.props;
 
-const site = Astro.site ?? new URL("https://arapiki96.github.io");
+const site = Astro.site ?? new URL("https://www.thomasmanch.com");
 
 let schema;
 
@@ -11,8 +11,21 @@ if (type === "Person") {
     "@type": "Person",
     name: "Thomas Manch",
     jobTitle: "Senior Reporter",
-    description: "Senior reporter covering infrastructure, transport, and housing in New Zealand",
+    description: "Thomas Manch is a New Zealand journalist covering infrastructure, transport and housing for BusinessDesk. He previously covered politics, foreign affairs, trade and defence for The Post and Stuff.",
     url: site.toString(),
+    knowsAbout: [
+      "Infrastructure",
+      "Transport",
+      "Housing",
+      "New Zealand politics",
+      "Foreign affairs",
+      "Trade",
+      "Defence"
+    ],
+    homeLocation: {
+      "@type": "Place",
+      name: "Wellington, New Zealand"
+    },
     sameAs: [
       "https://www.instagram.com/thomas_manch_/",
       "https://x.com/thomas_manch_",
@@ -20,7 +33,7 @@ if (type === "Person") {
       "https://businessdesk.co.nz/journalist/thomas-manch"
     ],
     worksFor: {
-      "@type": "Organization",
+      "@type": "NewsMediaOrganization",
       name: "BusinessDesk"
     }
   };

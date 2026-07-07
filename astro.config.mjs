@@ -27,7 +27,7 @@ function rehypeExternalLinksNewTab() {
 }
 
 export default defineConfig({
-  site: 'https://arapiki96.github.io',
+  site: 'https://www.thomasmanch.com',
   integrations: [react(), markdoc(), sitemap(), ...(isBuild ? [] : [keystatic()])],
   markdown: {
     rehypePlugins: [rehypeExternalLinksNewTab],

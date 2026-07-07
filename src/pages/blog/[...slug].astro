@@ -24,7 +24,7 @@ const { Content } = await post.render();
   ogType="article"
   publishedTime={publishedTime}
 >
-  <h2>{post.data.title}</h2>
+  <h1 class="post-title">{post.data.title}</h1>
   <p class="muted"><time datetime={post.data.date.toISOString()}>{displayDate}</time></p>
   <Content />
 </BaseLayout>

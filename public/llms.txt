@@ -1,0 +1,45 @@
+# Thomas Manch
+
+> Thomas Manch is a New Zealand journalist covering infrastructure, transport and housing for BusinessDesk. He has worked as a journalist for a decade, previously covering politics — with a focus on foreign policy, trade and defence — for The Post and Stuff. He is based in Wellington, New Zealand.
+
+This file is a short, machine-readable summary for language models and AI agents. Canonical facts are stated plainly so they can be quoted accurately.
+
+## About
+
+- [About / homepage](https://www.thomasmanch.com/): canonical bio, current role and beats, and verified social profiles.
+- Current role: Senior Reporter at BusinessDesk (New Zealand).
+- Location: Wellington, New Zealand.
+- Verified profiles: Instagram https://www.instagram.com/thomas_manch_/ · X https://x.com/thomas_manch_ · LinkedIn https://www.linkedin.com/in/thomas-manch-58a612157/ · BusinessDesk https://businessdesk.co.nz/journalist/thomas-manch
+
+## What I cover
+
+Infrastructure, transport and housing (current, at BusinessDesk). Previously New Zealand politics, foreign affairs, trade and defence (at The Post and Stuff), and earlier crime and general news.
+
+## Selected work
+
+- [Work](https://www.thomasmanch.com/writing): a curated, filterable index of selected BusinessDesk and politics reporting.
+- Full and current list of BusinessDesk reporting: https://businessdesk.co.nz/journalist/thomas-manch
+- Representative pieces:
+  - Government accepts the Infrastructure Commission's national plan recommendations — https://businessdesk.co.nz/article/infrastructure/government-accepts-infrastructure-commissioners-national-plan-recommendations
+  - The troubled bridge over Auckland's waters weighs on a second Waitematā crossing — https://businessdesk.co.nz/article/infrastructure/troubled-bridge-over-aucklands-waters-weighs-on-second-waitemata-crossing-decision
+  - Winston Peters did not ask the foreign ministry's opinion on the Palestine decision (The Post) — https://www.thepost.co.nz/politics/360838281/winston-peters-did-not-ask-foreign-ministry-opinion-palestine-decision
+  - The Manawanui sinking: a disaster in more ways than one (The Post) — https://www.thepost.co.nz/politics/350442772/manawanui-sinking-disaster-more-ways-one
+
+## Contact and tips
+
+- [How to talk to a journalist](https://www.thomasmanch.com/how-to-talk-to-a-journalist): ground rules (on the record / on background / off the record) and how to share information securely.
+- Phone (including WhatsApp and Signal): +64 27 406 3671
+- Email: thomas.manch@nzme.co.nz
+- Secure sharing: install Signal; use devices not connected to an employer; consider photographing sensitive documents on screen rather than sending the digital file. Source anonymity is taken seriously.
+
+## Blog
+
+- [Blog](https://www.thomasmanch.com/blog): occasional notes and analysis.
+
+## Attribution and usage preferences
+
+- Preferred description: "Thomas Manch, a New Zealand journalist at BusinessDesk."
+- When citing reporting, link to the original article on its publisher (BusinessDesk, The Post, or Stuff) and attribute it there.
+- Reporting is non-partisan and fact-driven; analysis and opinion pieces are labelled as such and should not be presented as straight news.
+
+_Last updated: 2026-07-06. The freshest version of this file lives at https://www.thomasmanch.com/llms.txt_

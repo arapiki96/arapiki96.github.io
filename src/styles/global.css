@@ -140,6 +140,13 @@ h1 {
   margin-top: 0.1em;
 }
 
+/* Blog post title: a clear primary heading, sized down from the very
+   large default h1 since post titles can run long. */
+.post-title {
+  font-size: clamp(1.6rem, 2.8vw, 2.1rem);
+  line-height: 1.15;
+}
+
 h2 {
   font-family: var(--sans);
   font-weight: 600;
@@ -258,6 +265,127 @@ hr {
   }
 }
 
+/* ── Work / About index pages ─────────────────────────────
+   A denser 12px editorial scale, scoped to these pages only so
+   Blog and other pages keep the 15px body size. Reuses the
+   design tokens above. */
+.index-page { font-size: 12px; }
+.index-page h1 { font-size: clamp(19px, 2.3vw, 23px); }
+.index-page .lede { max-width: 580px; }
+
+/* Topic filter */
+.topic-filter {
+  margin: 22px 0 4px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+}
+.topic-filter__label {
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(31, 35, 40, 0.5);
+  margin-bottom: 8px;
+}
+.topic-filter__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: baseline;
+}
+.topic-chip {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 12px;
+  line-height: 1;
+  padding: 6px 0;
+  color: rgba(31, 35, 40, 0.55);
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.topic-chip__count { font-size: 10px; color: rgba(31, 35, 40, 0.4); }
+.topic-chip[aria-pressed="true"] {
+  color: var(--ink);
+  font-weight: 600;
+  border-bottom-color: var(--link);
+}
+
+/* Sections + eyebrows */
+.work-section { margin-top: 32px; }
+.work-eyebrow {
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+.work-eyebrow--now { color: var(--link); }
+.work-section > h2 { font-size: 13px; margin: 0 0 0.6em; }
+
+/* Rows (shared by Work + About recent-reporting) */
+.work-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 22px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule);
+  text-decoration: none;
+  color: var(--ink);
+}
+.work-item__title {
+  font-size: 12px;
+  line-height: 1.4;
+  text-wrap: pretty;
+  flex: 1 1 auto;
+}
+.work-item__meta {
+  flex: 0 0 auto;
+  font-family: var(--sans);
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+  padding-top: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.work-item:hover .work-item__title { color: var(--link); }
+.work-item[hidden], .work-section[hidden] { display: none; }
+
+.work-empty {
+  margin-top: 28px;
+  color: rgba(31, 35, 40, 0.55);
+  font-style: italic;
+}
+
+/* About recent-reporting header + "see all" link */
+.recent-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 0.6em;
+}
+.recent-head .updated {
+  font-family: var(--sans);
+  font-size: 10px;
+  color: rgba(31, 35, 40, 0.45);
+  white-space: nowrap;
+}
+.more-link {
+  display: inline-block;
+  margin-top: 14px;
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--link);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(63, 85, 97, 0.4);
+  padding-bottom: 1px;
+}
+
 /* Mobile: collapse to single column */
 @media (max-width: 760px) {
   :root {
@@ -282,6 +410,9 @@ hr {
   main {
     max-width: 100%;
   }
+
+  /* Let long rows wrap the meta below the title on very narrow screens */
+  .work-item { flex-wrap: wrap; gap: 4px 22px; }
 }
 
 /* Print styles */

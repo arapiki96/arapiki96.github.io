@@ -10,7 +10,7 @@ export async function GET(context: APIContext) {
   return rss({
     title: 'Thomas Manch | Blog',
     description: 'Notes, analysis, and occasional updates from Thomas Manch',
-    site: context.site?.toString() ?? 'https://arapiki96.github.io',
+    site: context.site?.toString() ?? 'https://www.thomasmanch.com',
     items: posts.map((post) => ({
       title: post.data.title,
       description: post.data.description,
