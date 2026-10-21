@@ -10,6 +10,7 @@ export function formatDate(date: Date | string): string {
   }
 
   return new Intl.DateTimeFormat("en-NZ", {
+    timeZone: "Pacific/Auckland",
     year: "numeric",
     month: "short",
     day: "numeric",
@@ -28,6 +29,7 @@ export function formatDateTime(date: Date | string): string {
   }
 
   return new Intl.DateTimeFormat("en-NZ", {
+    timeZone: "Pacific/Auckland",
     year: "numeric",
     month: "short",
     day: "numeric",

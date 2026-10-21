@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 
-const AUTHOR_URL = "https://businessdesk.co.nz/journalist/thomas-manch?page=1";
+export const AUTHOR_URL = "https://www.businessdesk.co.nz/author/thomas-manch/";
 
 export interface Story {
   title: string;
@@ -21,48 +21,105 @@ async function fetchAuthorPage(): Promise<string> {
       signal: controller.signal,
     });
 
-    clearTimeout(timeoutId);
-
     if (!res.ok) {
       throw new Error(`Author page fetch failed: ${res.status} ${res.statusText}`);
     }
 
     return await res.text();
   } catch (error) {
-    clearTimeout(timeoutId);
     if (error instanceof Error && error.name === "AbortError") {
       throw new Error("Request timeout: BusinessDesk took too long to respond");
     }
     throw error;
+  } finally {
+    clearTimeout(timeoutId);
   }
 }
 
 /**
- * Parses stories from the author page HTML using cheerio.
- * Handles both h2 (featured) and h4 (regular) card layouts.
+ * Read the JSON array assigned by Arc Publishing without executing page scripts.
+ * Track strings and nesting so punctuation inside headlines cannot end the array.
  */
-function parseStories(html: string, limit: number): Story[] {
+function readStoryData(html: string): unknown[] {
   const $ = cheerio.load(html);
-  const entries: Story[] = [];
+  for (const script of $("script").toArray()) {
+    const text = $(script).text();
+    const marker = /\bFusion\.globalContent\s*=\s*/.exec(text);
+    if (!marker) continue;
+    const start = marker.index + marker[0].length;
+    if (text[start] !== "[") break;
 
-  $(".card-title a").each((_i, el) => {
-    if (entries.length >= limit) return false;
-
-    const $el = $(el);
-    const link = $el.attr("href") ?? "";
-    const title = $el.text().trim();
-
-    // Find the associated date by traversing up to the card container
-    const card = $el.closest(".card-body, .card-content, .news-card");
-    const pubDate = card.find(".news-date").first().text().trim();
-
-    // Security: Only accept businessdesk.co.nz links
-    if (link && title && link.startsWith("https://businessdesk.co.nz/")) {
-      entries.push({ title, link, pubDate });
+    let depth = 0;
+    let inString = false;
+    let escaped = false;
+    for (let i = start; i < text.length; i++) {
+      const char = text[i];
+      if (inString) {
+        if (escaped) escaped = false;
+        else if (char === "\\") escaped = true;
+        else if (char === '"') inString = false;
+      } else if (char === '"') {
+        inString = true;
+      } else if (char === "[") {
+        depth++;
+      } else if (char === "]" && --depth === 0) {
+        try {
+          return JSON.parse(text.slice(start, i + 1));
+        } catch {
+          throw new Error("BusinessDesk story data is not valid JSON");
+        }
+      }
     }
-  });
+    break;
+  }
+  throw new Error("BusinessDesk author page is missing its structured story data");
+}
 
-  return entries;
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+/** The author page also includes recommendations by other writers. */
+export function parseStories(html: string, limit = 10): Story[] {
+  if (!Number.isInteger(limit) || limit < 1) {
+    throw new Error("Story limit must be a positive integer");
+  }
+  const entries = new Map<string, Story>();
+  for (const item of readStoryData(html)) {
+    if (!isRecord(item) || item.contentType !== "story") continue;
+    const authors = Array.isArray(item.authors) ? item.authors : [item.author];
+    if (!authors.some((author) => isRecord(author) && (
+      author.slug === "thomas-manch" ||
+      (typeof author.name === "string" && author.name.trim().toLowerCase() === "thomas manch")
+    ))) continue;
+
+    const title = typeof item.headline === "string" ? item.headline.trim() : "";
+    const pubDate = item.displayDate ?? item.publishDate;
+    if (!title || typeof pubDate !== "string" || !Number.isFinite(Date.parse(pubDate))) continue;
+    if (typeof item.websiteUrl !== "string" || !item.websiteUrl.trim()) continue;
+
+    let url: URL;
+    try {
+      url = new URL(item.websiteUrl, AUTHOR_URL);
+    } catch {
+      continue;
+    }
+    if (url.protocol !== "https:" || url.port || url.username || url.password ||
+      !["businessdesk.co.nz", "www.businessdesk.co.nz"].includes(url.hostname)) continue;
+    url.hostname = "www.businessdesk.co.nz";
+    url.search = "";
+    url.hash = "";
+    const link = url.href;
+    if (!entries.has(link)) entries.set(link, { title, link, pubDate });
+  }
+
+  const stories = [...entries.values()]
+    .sort((a, b) => Date.parse(b.pubDate) - Date.parse(a.pubDate))
+    .slice(0, limit);
+  if (!stories.length) {
+    throw new Error("BusinessDesk returned no valid Thomas Manch stories; keeping the existing deployment");
+  }
+  return stories;
 }
 
 /**

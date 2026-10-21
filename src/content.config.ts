@@ -1,4 +1,6 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { glob } from "astro/loaders";
+import { z } from "astro/zod";
 
 // Beats used to tag and filter Work-page items. Keep in sync with the
 // `beat` select options in keystatic.config.ts. Ordered by prominence —
@@ -13,7 +15,7 @@ export const BEATS = [
 ] as const;
 
 const blog = defineCollection({
-  type: "content",
+  loader: glob({ pattern: "**/*.md", base: "./src/content/blog" }),
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
@@ -25,7 +27,7 @@ const blog = defineCollection({
 
 // "Now" — curated BusinessDesk reporting shown on the Work page.
 const work = defineCollection({
-  type: "data",
+  loader: glob({ pattern: "**/*.yaml", base: "./src/content/work" }),
   schema: z.object({
     title: z.string(),
     url: z.string().url(),
@@ -36,7 +38,7 @@ const work = defineCollection({
 
 // "Before" — earlier reporting at The Post & Stuff.
 const politics = defineCollection({
-  type: "data",
+  loader: glob({ pattern: "**/*.yaml", base: "./src/content/politics" }),
   schema: z.object({
     title: z.string(),
     url: z.string().url(),

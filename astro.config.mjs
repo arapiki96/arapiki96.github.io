@@ -3,6 +3,7 @@ import react from '@astrojs/react';
 import markdoc from '@astrojs/markdoc';
 import keystatic from '@keystatic/astro';
 import sitemap from '@astrojs/sitemap';
+import { unified } from '@astrojs/markdown-remark';
 
 const isBuild = process.env.NODE_ENV === "production";
 
@@ -28,8 +29,9 @@ function rehypeExternalLinksNewTab() {
 
 export default defineConfig({
   site: 'https://www.thomasmanch.com',
+  compressHTML: true,
   integrations: [react(), markdoc(), sitemap(), ...(isBuild ? [] : [keystatic()])],
   markdown: {
-    rehypePlugins: [rehypeExternalLinksNewTab],
+    processor: unified({ rehypePlugins: [rehypeExternalLinksNewTab] }),
   },
 });

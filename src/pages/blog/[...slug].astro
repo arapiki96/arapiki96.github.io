@@ -1,12 +1,12 @@
 ---
 import BaseLayout from "../../layouts/baselayout.astro";
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import { formatDate } from "../../lib/dateUtils";
 
 export async function getStaticPaths() {
   const posts = (await getCollection("blog")).filter((p) => !p.data.draft);
   return posts.map((post) => ({
-    params: { slug: post.slug.replace(/\/index$/, "") },
+    params: { slug: post.id.replace(/\/index$/, "") },
     props: { post },
   }));
 }
@@ -15,7 +15,7 @@ const { post } = Astro.props;
 const description = post.data.description ?? undefined;
 const publishedTime = post.data.date ?? undefined;
 const displayDate = formatDate(post.data.date);
-const { Content } = await post.render();
+const { Content } = await render(post);
 ---
 
 <BaseLayout

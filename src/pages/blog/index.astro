@@ -22,7 +22,7 @@ const normalizeSlug = (slug: string) => slug.replace(/\/index$/, "");
     <ul>
       {posts.map((post) => (
         <li>
-          <a href={`/blog/${normalizeSlug(post.slug)}/`}>{post.data.title}</a>
+          <a href={`/blog/${normalizeSlug(post.id)}/`}>{post.data.title}</a>
           <span class="muted">
             {" "}— <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
           </span>

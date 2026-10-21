@@ -64,6 +64,35 @@ git push
 ```
 GitHub Actions builds and deploys the site after you push.
 
+## Recent reporting feed
+
+The homepage collects the latest ten Thomas Manch stories from
+`https://www.businessdesk.co.nz/author/thomas-manch/` at build time. It reads the
+page's `Fusion.globalContent` JSON, filters by author, validates links and dates,
+removes duplicate links, and sorts newest first. Dates display in New Zealand time.
+
+Use Node 24 (as in GitHub Actions) and run `npm test` before building. The tests include a reduced
+publisher-page fixture and a synthetic recommendation by another author.
+
+GitHub Actions rebuilds every six hours and on pushes to `main`. A failed fetch or
+unrecognised/empty feed fails the build, leaving the last successful deployment
+online. The homepage's Updated date therefore reflects a successful collection.
+Check failed runs in the repository's Actions tab; notification delivery follows
+your GitHub Actions notification settings.
+
+GitHub automatically disables scheduled workflows in public repositories after
+60 days without repository activity. To recover, enable **Deploy to GitHub Pages**
+in Actions, then select **Run workflow**. An independent scheduler can avoid this
+dependency by enabling and dispatching the workflow every six hours:
+
+1. `PUT /repos/arapiki96/arapiki96.github.io/actions/workflows/deploy.yml/enable`
+2. `POST /repos/arapiki96/arapiki96.github.io/actions/workflows/deploy.yml/dispatches`
+   with JSON body `{"ref":"main"}`.
+
+Both requests use GitHub's REST API and a repository-scoped token with Actions
+write permission. Store that token only in the scheduler's secret store. An
+external scheduler has not yet been configured.
+
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
